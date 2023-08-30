@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -7,24 +7,26 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.20/dist/sweetalert2.min.css">
-
-    <title>Venta de paginas</title>
+    <title>Pagar</title>
 </head>
 
 <body>
     <main>
         <div class="grid-container">
-            <div class="personalizado" id="divPersonalizado">
-                <a href="pagar.html" id="botonCarrito">Tu carrito 🛒</a>
-                <button type="button" id="botonVaciar">Vaciar</button>
+            <div class="pagar">
+                <h1>Carrito</h1>
+                <a href="./index.html">Volver</a>
             </div>
-            <div class="grid-item-boxs">
-                <!-- Boxs de ventas -->
+            <div id="carro">
             </div>
+            <button type="button" id="comprar">Pagar compra</button>
+        </div>
         </div>
     </main>
+    <footer>
+    </footer>
     <script src="script.js"></script>
-    <script src="scriptTarjetaPerso.js"></script>
+    <script src="scriptCarritoCompras.js"></script>
 </body>
 
 </html>

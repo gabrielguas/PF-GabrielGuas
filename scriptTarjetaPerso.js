@@ -13,41 +13,25 @@ function mostrarElementosAgregados() {
             icon: 'warning',
             confirmButtonText: 'Aceptar'
         });
+
         return; // Salir de la función si el carrito está vacío
     }
 
-    // Concatenar los elementos del carrito para mostrarlos en SweetAlert
-    const elementosAgregados = carritoEnLocalStorage.join('\n');
-
-    // Realizar los cálculos
-    const cantidadElementos = carritoEnLocalStorage.length;
-    const totalCalculado = cantidadElementos * 75 * (dolar_blue); // Por simplicidad cada ítem vale 75pe (alto guiso)
-
-    // Mostrar SweetAlert con los elementos agregados y el total calculado
+    // Mostrar SweetAlert con botón "Ir a pagar"
     Swal.fire({
-        title: 'Elementos agregados al carrito:',
-        text: elementosAgregados,
+        title: 'Elementos en el carrito',
+        text: 'Tienes elementos en el carrito. ¿Deseas ir a pagar?',
         icon: 'info',
-        confirmButtonText: 'Pagar',
         showCancelButton: true,
-        cancelButtonText: 'Cancelar'
+        confirmButtonText: 'Ver el carrito',
+        cancelButtonText: 'Seguir comprando'
     }).then((result) => {
         if (result.isConfirmed) {
-            // Vaciar el carrito
-            localStorage.removeItem('carrito');
-            // Alerta de compra exitosa
-            Swal.fire({
-                title: 'Compra realizada con éxito',
-                text: `Total pagado: ${totalCalculado} pesos`,
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
+            // Redireccionar a la página "pagar.html"
+            window.location.href = 'pagar.html';
         }
     });
 }
-
-
-
 
 
 const planPersonalizado = {
@@ -185,24 +169,58 @@ function handleCheckboxChange(event) {
 
     // Guardar el carrito actualizado en localStorage
     localStorage.setItem('carrito', JSON.stringify(carritoEnLocalStorage));
+    actualizarContador();
 
     // Puedes agregar aquí alguna función para refrescar la visualización del carrito en la página si es necesario
 }
 
+// Obtener el enlace por su ID
+const botonCarrito = document.getElementById("botonCarrito");
 
+// Función para actualizar el contador de elementos y el estado del botón de vaciar
+function actualizarContador() {
+    // Obtener la cantidad de elementos en el Local Storage
+    const carritoItems = localStorage.getItem("carrito");
+    const carritoCantidad = carritoItems ? JSON.parse(carritoItems).length : 0;
 
-// Agregar la función imprimirCarrito
-function imprimirCarrito() {
-    // Obtener el contenido actual del carrito desde el localStorage
-    const carritoEnLocalStorage = JSON.parse(localStorage.getItem('carrito') || '[]');
-
-    // Mostrar el contenido del carrito en un alert
-    let cartContent = "Contenido del carrito en el localStorage:\n";
-    carritoEnLocalStorage.forEach(item => {
-        cartContent += `${item}\n`;
-    });
-    alert(cartContent);
+    // Actualizar el contenido del enlace con la cantidad de elementos y el enlace
+    botonCarrito.textContent = `Tu carrito 🛒 (${carritoCantidad} elementos)`;
+    
+    if (carritoCantidad === 0) {
+        botonCarrito.href = '#';
+        botonVaciar.style.display = 'none';
+    } else {
+        botonCarrito.href = 'pagar.html';
+        botonVaciar.style.display = 'block';
+    }
 }
+
+// Agregar event listener para cuando se agrega o quita un item
+window.addEventListener("storage", () => {
+    actualizarContador();
+});
+
+// Obtener el botón por su ID
+const botonVaciar = document.getElementById("botonVaciar");
+
+botonVaciar.addEventListener("click", () => {
+    // Vaciar el Local Storage
+    localStorage.removeItem("carrito");
+
+    // Actualizar el contador de elementos y ocultar el botón de vaciar
+    actualizarContador();
+
+    // Desmarcar todos los checkboxes
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+});
+
+// Llamada inicial para configurar el contador y el botón de vaciar
+actualizarContador();
+
+
 
 crearTarjetaPersonalizada();
 marcarCheckboxesDesdeLocalStorage();
