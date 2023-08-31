@@ -1,3 +1,5 @@
+const url_dolar2 = "https://api.bluelytics.com.ar/v2/latest";
+
 
 function mostrarDatosDeCarroDesdeLocalStorage() {
     // Buscar el elemento con ID "carro" en el HTML
@@ -81,5 +83,27 @@ function mostrarElementosAgregados() {
 
 
 
+
+//funcion asincrona + fetch con funciones "flecha"
+const obtenerDatos = async (url_dolar2) => {
+    try {
+      const response = await fetch(url_dolar2);
+      if (!response.ok) {
+        throw new Error('No se pudo obtener la información de la URL especficada');
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error al obtener los datos:', error.message);
+      return null;
+    }
+  };
+  
+  obtenerDatos(url_dolar2)
+    .then((datos) => {
+      dolar_blue = datos.blue.value_sell;
+    })
+    .catch((error) => {
+      console.error('Error al obtener los datos:', error.message);
+    });
 var botonComprar = document.getElementById("comprar");
 botonComprar.addEventListener("click", mostrarElementosAgregados);
